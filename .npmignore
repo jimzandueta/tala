@@ -1,0 +1,25 @@
+# Source and tests — not needed by consumers
+src/
+tests/
+
+# Config files
+tsup.config.ts
+jest.config.ts
+tsconfig.json
+tsconfig.test.json
+babel.config.json
+
+# CI and tooling
+.github/
+.claude/
+
+# Local planning and notes
+docs/
+
+# Dependencies
+node_modules/
+
+# Misc
+*.tsbuildinfo
+coverage/
+*.log
