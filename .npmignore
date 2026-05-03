@@ -7,7 +7,6 @@ tsup.config.ts
 jest.config.ts
 tsconfig.json
 tsconfig.test.json
-babel.config.json
 
 # CI and tooling
 .github/

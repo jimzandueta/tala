@@ -45,3 +45,14 @@ export interface FisherSetKeys {
   t: string
   s: string
 }
+
+/** Structured output from TalaChain.run() when { structured: true } is passed */
+export interface TalaResult {
+  history: PriceHistoryEntry[]
+  signals: Record<string, PriceHistoryEntry[]>
+}
+
+/** Options for TalaChain.run() */
+export interface RunOptions {
+  structured?: boolean
+}
