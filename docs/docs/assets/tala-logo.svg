@@ -1,0 +1,17 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Technical Analysis Library for Assets Icon</title>
+  <path d="M512 110 L615 405 H930 L675 585 L778 890 L512 710 L246 890 L349 585 L94 405 H409 Z"
+        fill="none" stroke="#05264E" stroke-width="58" stroke-linejoin="miter"/>
+  <path d="M225 782 C370 690 520 612 718 466" stroke="#05264E" stroke-width="42" stroke-linecap="round"/>
+  <path d="M718 466 L666 462 L700 423 Z" fill="#05264E"/>
+  <g fill="#05264E" stroke="#05264E" stroke-linecap="round">
+    <line x1="385" y1="566" x2="385" y2="716" stroke-width="14"/>
+    <rect x="352" y="596" width="66" height="92" rx="12"/>
+    <line x1="462" y1="510" x2="462" y2="678" stroke-width="14"/>
+    <rect x="429" y="548" width="66" height="112" rx="12"/>
+    <line x1="544" y1="462" x2="544" y2="632" stroke-width="14"/>
+    <rect x="511" y="500" width="66" height="110" rx="12"/>
+    <line x1="628" y1="416" x2="628" y2="588" stroke-width="14"/>
+    <rect x="595" y="452" width="66" height="112" rx="12"/>
+  </g>
+</svg>
