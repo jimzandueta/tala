@@ -20,28 +20,18 @@ const getTrend = (
   end?: number,
   isVector = false
 ): number => {
-  const diff = {
-    increasing: [] as number[],
-    decreasing: [] as number[],
-    equals: [] as number[]
+  let increasing = 0, decreasing = 0, equals = 0
+  const sliceEnd = end ?? priceHist.length
+  for (let i = start; i < sliceEnd - 1; i++) {
+    let difference = (priceHist[i][key] as number) - (priceHist[i + 1][key] as number)
+    if (isVector) difference = Math.abs(difference)
+    if (difference === 0) equals++
+    else if (difference > 0) increasing++
+    else decreasing++
   }
-  const arr = priceHist.slice(start, end).reverse()
-  arr.map((item, index, array) => {
-    if (index > 0) {
-      let difference = (item[key] as number) - (array[index - 1][key] as number)
-      difference = isVector ? Math.abs(difference) : difference
 
-      if (difference === 0) diff.equals.push(difference)
-      else if (difference > 0) diff.increasing.push(difference)
-      else diff.decreasing.push(difference)
-    }
-    return item
-  })
-
-  if (diff.increasing.length > (diff.decreasing.length + diff.equals.length)) return 1
-  if (diff.decreasing.length > (diff.increasing.length + diff.equals.length)) return -1
-  if (diff.equals.length > (diff.increasing.length + diff.decreasing.length)) return 0
-
+  if (increasing > decreasing + equals) return 1
+  if (decreasing > increasing + equals) return -1
   return 0
 }
 

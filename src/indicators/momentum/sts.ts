@@ -20,18 +20,15 @@ const getSTS = (
   priceKeys: PriceKeys = { c: 'close', h: 'high', l: 'low' },
   setKey: STSSetKey = { k: 'stsK', d: 'stsD' }
 ): PriceHistoryEntry[] => {
-  let arrH: number[] = []
-  let arrL: number[] = []
-  let hP: number, lP: number
   for (let i = 0; i < priceHist.length - period; i++) {
-    arrH = []
-    arrL = []
-    for (let j = i; j < i + period; j++) {
-      arrH.push(priceHist[j][priceKeys.h] as number)
-      arrL.push(priceHist[j][priceKeys.l] as number)
+    let hP = priceHist[i][priceKeys.h] as number
+    let lP = priceHist[i][priceKeys.l] as number
+    for (let j = i + 1; j < i + period; j++) {
+      const jh = priceHist[j][priceKeys.h] as number
+      const jl = priceHist[j][priceKeys.l] as number
+      if (jh > hP) hP = jh
+      if (jl < lP) lP = jl
     }
-    hP = arrH.sort().pop()!
-    lP = arrL.sort().reverse().pop()!
     priceHist[i][setKey.k] = (((priceHist[i][priceKeys.c] as number) - lP) / (hP - lP)) * 100
   }
   priceHist = getSMA(priceHist, 3, setKey.k, setKey.d)
