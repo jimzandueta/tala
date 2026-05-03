@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/@jimzandueta/tala)](https://www.npmjs.com/package/@jimzandueta/tala)
 [![build](https://github.com/jimzandueta/tala/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/jimzandueta/tala/actions/workflows/ci.yml)
-[![version](https://img.shields.io/badge/version-2.0.1-blue)](https://github.com/jimzandueta/tala/tags)
+[![version](https://img.shields.io/badge/version-2.1.0-blue)](https://github.com/jimzandueta/tala/tags)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![types](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org/)
 
@@ -53,7 +53,9 @@ signals.rsiCross   // PriceHistoryEntry[] of cross events
 | Category | Methods |
 |---|---|
 | Moving Averages | `.sma()` `.ema()` `.wema()` `.alma()` `.trix()` |
-| Momentum | `.macd()` `.rsi()` `.cci()` `.adx()` `.fisher()` `.sts()` `.williamsR()` |
+| Momentum | `.macd()` `.rsi()` `.cci()` `.adx()` `.fisher()` `.sts()` `.williamsR()` `.stochRSI()` |
+| Volatility | `.bb()` `.atr()` |
+| Volume | `.obv()` `.vwap()` |
 | Price Levels | `.pivotT()` `.fibRL()` |
 | Cross Signals | `.macdCross()` `.rsiCross()` `.cciCross()` `.almaCross()` `.fisherCross()` |
 

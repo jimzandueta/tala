@@ -1084,7 +1084,7 @@
             </div>
             <div>
               <h1>tala</h1>
-              <span>v2.0.1</span>
+              <span>v2.1.0</span>
             </div>
           </div>
         </div>
@@ -1107,6 +1107,13 @@
           <li><a href="#fisher">Fisher</a></li>
           <li><a href="#sts">Stochastic</a></li>
           <li><a href="#williamsr">Williams %R</a></li>
+          <li><a href="#stochrsi">Stochastic RSI</a></li>
+          <div class="nav-section">Volatility</div>
+          <li><a href="#bb">Bollinger Bands</a></li>
+          <li><a href="#atr">ATR</a></li>
+          <div class="nav-section">Volume</div>
+          <li><a href="#obv">OBV</a></li>
+          <li><a href="#vwap">VWAP</a></li>
           <div class="nav-section">Price Levels</div>
           <li><a href="#pivott">Pivot Points</a></li>
           <li><a href="#fibrl">Fibonacci RL</a></li>
@@ -1168,8 +1175,16 @@
             <tr>
               <td>Momentum</td>
               <td>
-                MACD, RSI, CCI, ADX, Fisher Transform, Stochastic, Williams %R
+                MACD, RSI, CCI, ADX, Fisher Transform, Stochastic, Williams %R, Stochastic RSI
               </td>
+            </tr>
+            <tr>
+              <td>Volatility</td>
+              <td>Bollinger Bands, ATR</td>
+            </tr>
+            <tr>
+              <td>Volume</td>
+              <td>OBV, VWAP</td>
             </tr>
             <tr>
               <td>Price levels</td>
@@ -2128,6 +2143,127 @@ signals.rsiCross
          CROSS SIGNALS
     ══════════════════════════════════════════════════════════ -->
 
+        <!-- ── Stochastic RSI ── -->
+        <section id="stochrsi">
+          <h2>Stochastic RSI - <code>.stochRSI(period?, changeKey?, kSetKey?, dSetKey?)</code></h2>
+          <p>
+            Applies the Stochastic formula to the RSI series rather than to raw price.
+            The K line measures where the current RSI sits within the RSI high/low range over
+            the lookback window. Default period=14. <code>changeVal</code> is computed automatically
+            if not already present.
+          </p>
+          <div class="formula">
+            <div class="label">Formula</div>
+            $$\text{StochRSI}_K = \frac{RSI - RSI_{\min}}{RSI_{\max} - RSI_{\min}} \times 100$$
+            $$\text{StochRSI}_D = \text{SMA}_3(\text{StochRSI}_K)$$
+            <div class="note">
+              When the RSI range is 0 (constant RSI), K is set to 0.
+              D is a 3-bar simple moving average signal line.
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-label">Worked example</div>
+            <div class="step">RSI window (5 bars): [62.5, 58.0, 70.0, 55.0, 65.0]</div>
+            <div class="step">RSI min = 55.0, RSI max = 70.0, range = 15.0</div>
+            <div class="step">K[0] = (62.5 − 55.0) / 15.0 × 100 = <strong>50.00</strong></div>
+          </div>
+          <pre><code><span class="fn">tala</span>().<span class="fn">stochRSI</span>(<span class="num">14</span>).<span class="fn">run</span>(history)
+<span class="cm">// result[0].stochRSIK → K line (0–100)</span>
+<span class="cm">// result[0].stochRSID3 → D line (3-bar SMA of K)</span></code></pre>
+        </section>
+
+        <!-- ── Bollinger Bands ── -->
+        <section id="bb">
+          <h2>Bollinger Bands - <code>.bb(period?, k?, priceKey?)</code></h2>
+          <p>
+            A volatility envelope centered on a simple moving average.
+            The upper and lower bands are placed <em>k</em> population standard deviations
+            above and below the mean. Default period=20, k=2, priceKey=&#39;close&#39;.
+          </p>
+          <div class="formula">
+            <div class="label">Formula</div>
+            $$\text{Mid} = \frac{1}{n}\sum_{i=0}^{n-1} p_i$$
+            $$\sigma = \sqrt{\frac{1}{n}\sum_{i=0}^{n-1}(p_i - \text{Mid})^2}$$
+            $$\text{Upper} = \text{Mid} + k\sigma, \quad \text{Lower} = \text{Mid} - k\sigma$$
+          </div>
+          <div class="example">
+            <div class="ex-label">Worked example (period=3, k=2)</div>
+            <div class="step">Closes: [104, 102, 100] → mean = 102.000000</div>
+            <div class="step">σ = &radic;(8/3) &asymp; 1.632993</div>
+            <div class="step">Upper = 102 + 2 &times; 1.632993 = <strong>105.265986</strong></div>
+            <div class="step">Lower = 102 &minus; 2 &times; 1.632993 = <strong>98.734014</strong></div>
+          </div>
+          <pre><code><span class="fn">tala</span>().<span class="fn">bb</span>(<span class="num">20</span>).<span class="fn">run</span>(history)
+<span class="cm">// result[0].bbUpper20 → upper band</span>
+<span class="cm">// result[0].bbMid20   → middle band (SMA)</span>
+<span class="cm">// result[0].bbLower20 → lower band</span></code></pre>
+        </section>
+
+        <!-- ── ATR ── -->
+        <section id="atr">
+          <h2>ATR (Average True Range) - <code>.atr(period?, priceKeys?, setKey?)</code></h2>
+          <p>
+            Measures market volatility as the Wilder-smoothed average of the True Range.
+            True Range is the greatest of: current high minus low, absolute distance from
+            previous close to current high, and absolute distance from previous close to
+            current low. Default period=14.
+          </p>
+          <div class="formula">
+            <div class="label">Formula</div>
+            $$TR_i = \max(H_i - L_i,\;|H_i - C_{i+1}|,\;|L_i - C_{i+1}|)$$
+            $$ATR_i = \text{WEMA}_{\text{period}}(TR)$$
+          </div>
+          <pre><code><span class="fn">tala</span>().<span class="fn">atr</span>(<span class="num">14</span>).<span class="fn">run</span>(history)
+<span class="cm">// result[0].atr14 → ATR value</span>
+<span class="cm">// result[0].tr    → True Range of each bar</span></code></pre>
+        </section>
+
+        <!-- ── OBV ── -->
+        <section id="obv">
+          <h2>OBV (On-Balance Volume) - <code>.obv(priceKey?, volumeKey?, setKey?)</code></h2>
+          <p>
+            Cumulative running total of volume, signed by the direction of the price move.
+            When price is up, volume is added; when down, volume is subtracted; when unchanged,
+            OBV is carried forward. Missing <code>volume</code> is treated as 0.
+          </p>
+          <div class="formula">
+            <div class="label">Formula</div>
+            $$OBV_i = OBV_{i+1} + \begin{cases} +V_i & \text{if } C_i > C_{i+1} \\ -V_i & \text{if } C_i < C_{i+1} \\ 0 & \text{otherwise} \end{cases}$$
+          </div>
+          <div class="example">
+            <div class="ex-label">Worked example</div>
+            <div class="step">Bars (newest → oldest): C=102,V=200 | C=101,V=150 | C=103,V=100 | C=100,V=0 (seed)</div>
+            <div class="step">OBV[seed=3] = 0</div>
+            <div class="step">OBV[2] = 0 + 100 = <strong>100</strong> (103 > 100)</div>
+            <div class="step">OBV[1] = 100 &minus; 150 = <strong>&minus;50</strong> (101 &lt; 103)</div>
+            <div class="step">OBV[0] = &minus;50 + 200 = <strong>150</strong> (102 &gt; 101)</div>
+          </div>
+          <pre><code><span class="fn">tala</span>().<span class="fn">obv</span>().<span class="fn">run</span>(history)
+<span class="cm">// result[0].obv → cumulative OBV value</span></code></pre>
+        </section>
+
+        <!-- ── VWAP ── -->
+        <section id="vwap">
+          <h2>VWAP (Volume-Weighted Average Price) - <code>.vwap(period?, priceKeys?, volumeKey?, setKey?)</code></h2>
+          <p>
+            Rolling volume-weighted average price computed over a sliding window.
+            Each bar&#39;s weight is its volume; the price used is the Typical Price (H+L+C)/3.
+            Missing <code>volume</code> is treated as 0, and the fallback is the plain TP of the
+            anchor bar. Default period=14.
+          </p>
+          <div class="formula">
+            <div class="label">Formula</div>
+            $$TP_i = \frac{H_i + L_i + C_i}{3}$$
+            $$VWAP = \frac{\sum_{j=i}^{i+n-1} TP_j \times V_j}{\sum_{j=i}^{i+n-1} V_j}$$
+          </div>
+          <pre><code><span class="fn">tala</span>().<span class="fn">vwap</span>(<span class="num">14</span>).<span class="fn">run</span>(history)
+<span class="cm">// result[0].vwap14 → VWAP value for the 14-bar window</span></code></pre>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+         CROSS SIGNALS
+    ══════════════════════════════════════════════════════════ -->
+
         <section id="cross-signals">
           <h2>Cross Signals</h2>
           <p>
@@ -2816,7 +2952,7 @@ result[<span class="num">0</span>].fisherPrev   <span class="cm">// renamed sign
                 <img src="assets/tala-logo.png" alt="tala" />
                 <div>
                   <strong>tala</strong>
-                  <span>Technical Analysis Library for Assets · v2.0.1</span>
+                  <span>Technical Analysis Library for Assets · v2.1.0</span>
                 </div>
               </div>
               <p>

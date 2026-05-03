@@ -13,6 +13,11 @@ import { getFisher } from '../indicators/momentum/fisher'
 import { getADX } from '../indicators/momentum/adx'
 import { getPivotT } from '../indicators/levels/pivotT'
 import { getFibRL } from '../indicators/levels/fibRL'
+import { getBB } from '../indicators/trend/bb'
+import { getATR } from '../indicators/primitives/atr'
+import { getStochRSI } from '../indicators/momentum/stochRSI'
+import { getOBV } from '../indicators/volume/obv'
+import { getVWAP } from '../indicators/volume/vwap'
 import { getALMACross } from '../signals/almaCross'
 import { getMACDCross } from '../signals/macdCross'
 import { getRSICross } from '../signals/rsiCross'
@@ -99,6 +104,37 @@ export class TalaChain {
 
   fibRL(period?: number, priceKeys?: PriceKeys): this {
     this.indicatorOps.push(h => getFibRL(h, period, priceKeys))
+    return this
+  }
+
+  bb(period?: number, k?: number, priceKey?: string): this {
+    this.indicatorOps.push(h => getBB(h, period, k, priceKey))
+    return this
+  }
+
+  atr(period?: number, priceKeys?: PriceKeys): this {
+    this.indicatorOps.push(h => getATR(h, period, priceKeys))
+    return this
+  }
+
+  stochRSI(period?: number, changeKey?: string, kSetKey?: string, dSetKey?: string): this {
+    this.indicatorOps.push(h => {
+      h.forEach((entry, i) => {
+        if (entry.changeVal === undefined)
+          entry.changeVal = i < h.length - 1 ? entry.close - h[i + 1].close : 0
+      })
+      getStochRSI(h, period, changeKey, kSetKey, dSetKey)
+    })
+    return this
+  }
+
+  obv(priceKey?: string, volumeKey?: string, setKey?: string): this {
+    this.indicatorOps.push(h => getOBV(h, priceKey, volumeKey, setKey))
+    return this
+  }
+
+  vwap(period?: number, priceKeys?: PriceKeys, volumeKey?: string, setKey?: string): this {
+    this.indicatorOps.push(h => getVWAP(h, period, priceKeys, volumeKey, setKey))
     return this
   }
 

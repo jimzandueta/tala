@@ -67,3 +67,13 @@ export function makeOscillatingHistoryWithChangeVal(n: number, amplitude = 20, p
     changeVal: i < hist.length - 1 ? entry.close - hist[i + 1].close : undefined,
   }))
 }
+
+export function makeHistoryWithVolume(closes: number[], volumes: number[]): PriceHistoryEntry[] {
+  return closes.map((close, i) => ({
+    open: close,
+    high: close + 1,
+    low: close - 1,
+    close,
+    volume: volumes[i],
+  }))
+}

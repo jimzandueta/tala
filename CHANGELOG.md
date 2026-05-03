@@ -4,6 +4,22 @@ All notable changes to `@jimzandueta/tala` are documented here.
 
 ---
 
+## [2.1.0] — 2026-05-03
+
+### Added
+
+- **Bollinger Bands** — `.bb(period?, k?, priceKey?)`. Writes `bbUpper{period}`, `bbMid{period}`, `bbLower{period}`. Default period=20, k=2.
+- **ATR** (Average True Range) — `.atr(period?, priceKeys?, setKey?)`. Standalone WEMA of True Range. Writes `atr{period}`. Default period=14.
+- **Stochastic RSI** — `.stochRSI(period?, changeKey?, kSetKey?, dSetKey?)`. Applies Stochastic formula to RSI series. Writes `stochRSIK` (0–100) and `stochRSID3` (3-bar SMA signal line). Default period=14. `changeVal` auto-computed if missing.
+- **OBV** (On-Balance Volume) — `.obv(priceKey?, volumeKey?, setKey?)`. Cumulative volume signed by price direction. Writes `obv`. Handles missing `volume` field (treated as 0).
+- **VWAP** (Volume-Weighted Average Price) — `.vwap(period?, priceKeys?, volumeKey?, setKey?)`. Rolling Σ(TP×vol)/Σ(vol) over window. Writes `vwap{period}`. Default period=14. Handles missing volume field (treated as 0).
+
+### Fixed
+
+- **`getStochRSI` negative index bug** — when history was too short for any K bars to be computed (`stochLast < 0`), the tail-fill loop started at a negative index, accessing `undefined` entries and throwing `TypeError: Cannot set properties of undefined`. Fixed by clamping the loop start to `Math.max(0, stochLast + 1)`.
+
+---
+
 ## [2.0.1] — 2026-05-03
 
 ### Performance

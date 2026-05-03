@@ -1,6 +1,6 @@
 {
   "name": "@jimzandueta/tala",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "TALA — Technical Analysis Library for Assets. TypeScript, tree-shakeable, zero runtime deps.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
