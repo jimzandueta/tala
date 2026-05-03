@@ -2,6 +2,7 @@
 
 **Technical Analysis Library for Assets** — a TypeScript library of stock indicators with a fluent chain API, zero runtime dependencies, and dual CJS/ESM output.
 
+[![build](https://github.com/jimzandueta/tala/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/jimzandueta/tala/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@jimzandueta/tala)](https://www.npmjs.com/package/@jimzandueta/tala)
 [![license](https://img.shields.io/npm/l/@jimzandueta/tala)](LICENSE)
 [![types](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org/)
@@ -59,4 +60,4 @@ See the **[full API reference](https://jimzandueta.github.io/tala/docs/)** for p
 
 ## License
 
-ISC
+MIT

@@ -39,7 +39,7 @@
     "typescript"
   ],
   "author": "Jim Zandueta",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",

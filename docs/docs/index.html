@@ -1135,8 +1135,8 @@
             <strong>tala</strong> is a TypeScript technical analysis library for
             OHLC price history. You build a chain of indicators with
             <code>tala()</code>, call <code>.run(history)</code> once, and get
-            back the same array enriched with calculated fields. No mutation, no
-            globals, zero runtime dependencies, and full CJS + ESM output.
+            back a cloned array enriched with calculated fields. No mutation,
+            no globals, zero runtime dependencies, and full CJS + ESM output.
           </p>
 
           <div class="badges">
@@ -1177,7 +1177,7 @@
             </tr>
             <tr>
               <td>Signals</td>
-              <td>MACD Cross, RSI Cross, SMA Cross</td>
+              <td>MACD Cross, RSI Cross, CCI Cross, ALMA Cross, Fisher Cross</td>
             </tr>
           </table>
 
@@ -2188,12 +2188,24 @@ signals.rsiCross
               <td>Overbought or oversold transition</td>
             </tr>
             <tr>
-              <td><code>.smaCross()</code></td>
+              <td><code>.cciCross()</code></td>
               <td>
-                Detects moving-average crosses, typically fast SMA versus slow
-                SMA.
+                Detects CCI crosses through a configurable level, commonly
+                around <code>100</code> or <code>-100</code>.
               </td>
-              <td>Trend change or moving-average crossover</td>
+              <td>Momentum threshold break</td>
+            </tr>
+            <tr>
+              <td><code>.almaCross()</code></td>
+              <td>Detects when price crosses the ALMA line.</td>
+              <td>Price versus trend-line shift</td>
+            </tr>
+            <tr>
+              <td><code>.fisherCross()</code></td>
+              <td>
+                Detects when Fisher Transform crosses its signal line.
+              </td>
+              <td>Short-term reversal timing cue</td>
             </tr>
           </table>
 
@@ -2228,9 +2240,8 @@ signals.rsiCross
 }</code></pre>
 
           <div class="callout">
-            <strong>Key point:</strong> <code>signals.macdCross</code>,
-            <code>signals.rsiCross</code>, and <code>signals.smaCross</code> are
-            arrays of enriched bars, not separate tiny event objects.
+            <strong>Key point:</strong> every array under <code>signals</code>
+            contains enriched bars, not separate tiny event objects.
           </div>
 
           <h3>MACD cross — <code>.macdCross()</code></h3>
@@ -2338,41 +2349,47 @@ signals.rsiCross
  //   }
  // ]</span></code></pre>
 
-          <h3>SMA cross — <code>.smaCross()</code></h3>
+          <h3>Additional supported helpers</h3>
           <p>
-            <code>.smaCross()</code> is used when you want to compare a faster
-            moving average against a slower moving average. The most common use
-            case is a trend-following crossover.
+            tala also includes cross helpers for CCI, ALMA, and Fisher
+            Transform. These follow the same structured-output pattern as MACD
+            and RSI crosses: calculate the indicator first, then add the cross
+            helper at the end of the chain.
           </p>
 
-          <div class="example">
-            <div class="ex-label">
-              Common moving-average cross interpretation
-            </div>
-            <div class="step">
-              <strong>Fast SMA crosses above slow SMA:</strong> bullish
-              crossover. Short-term average is rising faster than the
-              longer-term average.
-            </div>
-            <div class="step">
-              <strong>Fast SMA crosses below slow SMA:</strong> bearish
-              crossover. Short-term average is weakening relative to the
-              longer-term average.
-            </div>
-            <div class="step">
-              <strong>Flat or choppy market:</strong> SMA crosses can produce
-              repeated false signals, so they are often combined with ADX,
-              volume, or higher-timeframe confirmation.
-            </div>
-          </div>
+          <table>
+            <tr>
+              <th>Method</th>
+              <th>Prerequisite indicator</th>
+              <th>Event logic</th>
+            </tr>
+            <tr>
+              <td><code>.cciCross()</code></td>
+              <td><code>.cci()</code></td>
+              <td>CCI crossing a level such as <code>100</code>.</td>
+            </tr>
+            <tr>
+              <td><code>.almaCross()</code></td>
+              <td><code>.alma()</code></td>
+              <td>Close price crossing the ALMA line.</td>
+            </tr>
+            <tr>
+              <td><code>.fisherCross()</code></td>
+              <td><code>.fisher()</code></td>
+              <td>Fisher Transform crossing its signal line.</td>
+            </tr>
+          </table>
 
           <pre><code><span class="kw">const</span> { history, signals } = <span class="fn">tala</span>()
-  .<span class="fn">sma</span>(<span class="num">20</span>)
-  .<span class="fn">sma</span>(<span class="num">50</span>)
-  .<span class="fn">smaCross</span>()
+  .<span class="fn">cci</span>(<span class="num">20</span>)
+  .<span class="fn">alma</span>(<span class="num">20</span>, <span class="num">6</span>, <span class="num">0.9</span>)
+  .<span class="fn">fisher</span>()
+  .<span class="fn">cciCross</span>()
+  .<span class="fn">almaCross</span>(<span class="num">20</span>, <span class="num">6</span>, <span class="num">0.9</span>)
+  .<span class="fn">fisherCross</span>()
   .<span class="fn">run</span>(priceHistory, { structured: <span class="kw">true</span> })
 
-signals.smaCross
+signals.cciCross
 <span class="cm">// [
  //   {
  //     date: '2026-01-20',
@@ -2380,10 +2397,12 @@ signals.smaCross
  //     high: 131,
  //     low: 124,
  //     close: 130,
- //     sma20: 121.75,
- //     sma50: 120.95
+ //     cci: 114.28
  //   }
- // ]</span></code></pre>
+ // ]
+
+signals.almaCross
+signals.fisherCross</span></code></pre>
 
           <h3>Structured output</h3>
           <p>
@@ -2462,7 +2481,6 @@ enriched[<span class="num">0</span>]
     { fastPeriod: <span class="num">12</span>, slowPeriod: <span class="num">26</span>, signalLength: <span class="num">9</span> },
     { includeSignal: <span class="kw">true</span>, includeHistogram: <span class="kw">true</span> }
   )
-  .<span class="fn">smaCross</span>()
   .<span class="fn">rsiCross</span>()
   .<span class="fn">macdCross</span>()
 
