@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/npm/l/@jimzandueta/tala)](LICENSE)
 [![types](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org/)
 
-📖 **[Full documentation →](https://jimzandueta.github.io/tala/)**
+📖 **[Full documentation →](https://jimzandueta.github.io/tala/docs/)**
 
 ---
 
@@ -55,7 +55,7 @@ signals.rsiCross   // PriceHistoryEntry[] of cross events
 | Price Levels | `.pivotT()` `.fibRL()` |
 | Cross Signals | `.macdCross()` `.rsiCross()` `.cciCross()` `.almaCross()` `.fisherCross()` |
 
-See the **[full API reference](https://jimzandueta.github.io/tala/)** for parameters, output keys, and examples.
+See the **[full API reference](https://jimzandueta.github.io/tala/docs/)** for parameters, output keys, and examples.
 
 ## License
 
