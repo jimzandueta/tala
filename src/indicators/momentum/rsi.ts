@@ -17,43 +17,42 @@ const getRSI = (
   changeKey = 'changeVal',
   setKey = 'rsi'
 ): PriceHistoryEntry[] => {
-  for (let i = priceHist.length - 1; i >= 0; i--) {
-    let gArr: number[] = []
-    let lArr: number[] = []
-    let gAve: number | null = null
-    let lAve: number | null = null
-    let gCur: number | null = null
-    let lCur: number | null = null
+  const seedIdx = priceHist.length - 1 - period
 
-    if (i <= priceHist.length - 1 - period) {
+  for (let i = priceHist.length - 1; i >= 0; i--) {
+    if (i > seedIdx) {
+      priceHist[i][`${setKey}${period}`] = 0
+      continue
+    }
+
+    let gAve: number
+    let lAve: number
+
+    if (i === seedIdx) {
+      // Seed: simple average of gains and losses over first `period` bars
+      let gSum = 0, lSum = 0
       for (let j = i; j < i + period; j++) {
         const change = priceHist[j][changeKey] as number
-        change >= 0 ? gArr.push(change) : gArr.push(0)
-        change < 0 ? lArr.push(Math.abs(change)) : lArr.push(0)
+        if (change >= 0) gSum += change; else lSum -= change
       }
-    }
-    if (i === priceHist.length - 1 - period) {
-      gAve = gArr.reduce((sum, g) => sum + g) / gArr.length
-      lAve = lArr.reduce((sum, l) => sum + l) / lArr.length
-    } else if (i < priceHist.length - 1 - period) {
-      gCur = gArr.slice(0, 1)[0]
-      lCur = lArr.slice(0, 1)[0]
-      gAve = (((priceHist[i + 1]['gAve'] as number) * (period - 1)) + gCur) / period
-      lAve = (((priceHist[i + 1]['lAve'] as number) * (period - 1)) + lCur) / period
-
+      gAve = gSum / period
+      lAve = lSum / period
+    } else {
+      // Rolling Wilder smoothing — no need to rebuild arrays
+      const change = priceHist[i][changeKey] as number
+      const gCur = change >= 0 ? change : 0
+      const lCur = change < 0 ? -change : 0
+      gAve = ((priceHist[i + 1]['gAve'] as number) * (period - 1) + gCur) / period
+      lAve = ((priceHist[i + 1]['lAve'] as number) * (period - 1) + lCur) / period
       delete priceHist[i + 1]['gAve']
       delete priceHist[i + 1]['lAve']
-    } else {
-      priceHist[i]['gAve'] = 0
-      priceHist[i]['lAve'] = 0
-      priceHist[i][`${setKey}${period}`] = 0
     }
-    priceHist[i]['gAve'] = gAve ?? undefined
-    priceHist[i]['lAve'] = lAve ?? undefined
-    if (gAve !== null && lAve !== null) {
-      priceHist[i][`${setKey}${period}`] = parseFloat((100 - (100 / (1 + (gAve / lAve)))).toFixed(4))
-    }
+
+    priceHist[i]['gAve'] = gAve
+    priceHist[i]['lAve'] = lAve
+    priceHist[i][`${setKey}${period}`] = parseFloat((100 - (100 / (1 + (gAve / lAve)))).toFixed(4))
   }
+
   return priceHist
 }
 

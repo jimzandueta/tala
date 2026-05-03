@@ -15,13 +15,16 @@ const getTR = (
   priceKeys: PriceKeys = { c: 'close', h: 'high', l: 'low' },
   setKey = 'tr'
 ): PriceHistoryEntry[] => {
+  const last = priceHist.length - 1
   for (let i = 0; i < priceHist.length; i++) {
-    const arr = [
-      (priceHist[i][priceKeys.h] as number) - (priceHist[i][priceKeys.l] as number),
-      Math.abs(i === priceHist.length - 1 ? 0 : (priceHist[i][priceKeys.h] as number) - (priceHist[i + 1][priceKeys.c] as number)),
-      Math.abs(i === priceHist.length - 1 ? 0 : (priceHist[i][priceKeys.l] as number) - (priceHist[i + 1][priceKeys.c] as number)),
-    ]
-    priceHist[i][setKey] = arr.sort().pop()!
+    const h = priceHist[i][priceKeys.h] as number
+    const l = priceHist[i][priceKeys.l] as number
+    if (i === last) {
+      priceHist[i][setKey] = h - l
+    } else {
+      const prevC = priceHist[i + 1][priceKeys.c] as number
+      priceHist[i][setKey] = Math.max(h - l, Math.abs(h - prevC), Math.abs(l - prevC))
+    }
   }
   return priceHist
 }

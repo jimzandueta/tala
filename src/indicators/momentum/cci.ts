@@ -26,12 +26,14 @@ const getCCI = (
 
   for (let i = priceHist.length - 1; i >= 0; i--) {
     if (i <= priceHist.length - period) {
+      const tp = priceHist[i]['tp'] as number
+      const smatp = priceHist[i][`smatp${period}`] as number
       let mdSum = 0.0
       for (let j = i; j < i + period; j++) {
-        mdSum += Math.abs((priceHist[j]['tp'] as number) - (priceHist[i][`smatp${period}`] as number))
+        mdSum += Math.abs((priceHist[j]['tp'] as number) - smatp)
       }
       const md = mdSum / period
-      priceHist[i][setKey] = parseFloat((((priceHist[i]['tp'] as number) - (priceHist[i][`smatp${period}`] as number)) / (constant * md)).toFixed(4))
+      priceHist[i][setKey] = parseFloat(((tp - smatp) / (constant * md)).toFixed(4))
     } else {
       priceHist[i][setKey] = 0
     }

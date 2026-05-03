@@ -16,8 +16,8 @@ const expandMetric = (data: string | number): number => {
   const checker = str.search(/[A-Za-z]/g)
   if (checker < 0) return parseFloat(str)
 
-  const num = str.split('').slice(0, -1).join('')
-  const postChar = str.split('').splice(-1, 1).join('')
+  const num = str.slice(0, -1)
+  const postChar = str[str.length - 1]
   if (postChar === 'K') return parseFloat(num) * 1000
   if (postChar === 'M') return parseFloat(num) * 1000000
   if (postChar === 'B') return parseFloat(num) * 1000000000

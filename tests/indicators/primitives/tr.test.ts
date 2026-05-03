@@ -53,9 +53,9 @@ describe('getTR', () => {
       { open: 10, high: 11, low: 9, close: 10 },
     ]
     getTR(hist)
-    // BUG: arr.sort() uses lexicographic order. '10' < '2' < '8', so pop() returns 8, not 10.
-    // TODO: fix getTR to use Math.max(...arr); update this expected value to 10 when fixed.
-    expect(hist[0].tr).toBe(8) // wrong value — reflects current buggy behavior
+    // BUG (now fixed): arr.sort() used lexicographic order. '10' < '2' < '8', so pop() returned 8, not 10.
+    // getTR now uses Math.max(...), so the correct value 10 is expected.
+    expect(hist[0].tr).toBe(10) // correct value after fix
   })
 
   it('computes tr for all entries in a multi-entry history', () => {

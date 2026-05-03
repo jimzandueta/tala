@@ -4,6 +4,25 @@ All notable changes to `@jimzandueta/tala` are documented here.
 
 ---
 
+## [2.0.1] — 2026-05-03
+
+### Performance
+
+- **`getSMA`** — replaced O(n × period) summation loop with an O(n) sliding window. All indicators that internally seed from SMA (`getEMA`, `getWEMA`, `getSignal`, `getCCI`, `getADX`) benefit automatically.
+- **`getALMA`** — Gaussian coefficients are now precomputed once per call instead of being recomputed for every bar, eliminating O(period) `Math.exp` calls per bar.
+- **`getTR`** — replaced `[a, b, c].sort().pop()` (array allocation + sort per bar) with a single `Math.max(a, b, c)` expression. Also **fixes a pre-existing bug** where lexicographic sort produced wrong values for double-digit price differences (e.g. `sort(['10','2','8'])` → `8` instead of `10`).
+- **`getSTS`** / **`getWilliamsR`** — replaced `arr.sort().pop()` pattern for period high/low with a direct linear scan, removing per-bar array allocations and sort overhead.
+- **`getRSI`** — gain/loss arrays are now only built at the seed position; all subsequent bars use the rolling value directly. Replaced `gArr.slice(0, 1)[0]` with direct index access.
+- **`getCCI`** — `smatp` and `tp` lookups are cached outside the inner mean-deviation loop, reducing repeated dynamic property access.
+- **`expandMetric`** — replaced `str.split('').slice(0,-1).join('')` with `str.slice(0,-1)` and `str.split('').splice(-1,1).join('')` with `str[str.length-1]`.
+- **`getTrend`** — replaced `.slice().reverse()` + `.map()` (two allocations, implicit return array) with a single reverse-index `for` loop using integer counters.
+
+### Fixed
+
+- **`getTR` lexicographic sort bug** — `arr.sort()` was comparing array values as strings, causing incorrect True Range values when any component was ≥ 10. Now correctly uses `Math.max()`.
+
+---
+
 ## [2.0.0] — 2026-05-02
 
 ### Breaking Changes
