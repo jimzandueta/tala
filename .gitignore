@@ -1,43 +1,37 @@
-# Dependencies
-node_modules/
 
-# Build output
-dist/
-
-# Local planning and notes
-docs/*
+!.env.example
 !docs/docs/
 !docs/docs/**
-
-# Environment
-.env
-.env.*
-!.env.example
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS
 .DS_Store
 .DS_Store?
-Thumbs.db
-ehthumbs.db
-
-# Editor
-.vscode/
+.env
+.env.*
 .idea/
-*.swp
+.vscode/
+*.log
 *.swo
-*~
-
-# TypeScript
-*.tsbuildinfo
-
-# Test coverage
-coverage/
-
-# Misc
+*.swp
 *.tgz
+*.tsbuildinfo
+*~
+# Build output
+# Dependencies
+# Editor
+# Environment
+# Generated chart output
+# Local planning and notes
+# Logs
+# Misc
+# OS
+# Test coverage
+# TypeScript
+coverage/
+demo/*.html
+dist/
+docs/*
+ehthumbs.db
+node_modules/
+npm-debug.log*
+Thumbs.db
+yarn-debug.log*
+yarn-error.log*
