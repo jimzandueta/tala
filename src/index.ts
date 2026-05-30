@@ -10,3 +10,5 @@ export type {
   TalaResult,
   RunOptions,
 } from './types'
+export { ChartTerminal } from './chain/ChartTerminal'
+export type { ChartOptions, ChartResult } from './viz/types'

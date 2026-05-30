@@ -1,4 +1,6 @@
 import { PriceHistoryEntry, MACDPeriods, MACDOptions, PriceKeys, STSSetKey, FisherSetKeys, TalaResult, RunOptions } from '../types'
+import type { ChartOptions } from '../viz/types'
+import type { ChartTerminal } from './ChartTerminal'
 import { getSMA } from '../indicators/trend/sma'
 import { getEMA } from '../indicators/trend/ema'
 import { getALMA } from '../indicators/trend/alma'
@@ -185,5 +187,54 @@ export class TalaChain {
     }
 
     return data
+  }
+
+  async chart(history: PriceHistoryEntry[], options?: ChartOptions): Promise<ChartTerminal> {
+    const { LightweightChartAdapter } = await import('../viz/LightweightChartAdapter')
+    const { HtmlRenderer } = await import('../viz/HtmlRenderer')
+    const { runServer, findAvailablePort } = await import('../viz/ServerRunner')
+    const { ChartTerminal } = await import('./ChartTerminal')
+
+    const enrichedHistory = this.run(history)
+
+    const adapter = new LightweightChartAdapter(enrichedHistory)
+    const renderer = new HtmlRenderer(adapter, options ?? {})
+
+    const format = options?.format ?? 'server'
+
+    if (format === 'html') {
+      let filePath = options?.filePath ?? './demo/tala-chart.html'
+      const path = await import('path')
+      const resolvedPath = path.resolve(filePath)
+      const cwd = path.resolve('.')
+      if (!resolvedPath.startsWith(cwd + path.sep) && resolvedPath !== cwd) {
+        throw new Error('filePath must be within the current working directory')
+      }
+      if (!resolvedPath.endsWith('.html')) {
+        throw new Error('filePath must end with .html')
+      }
+      const fs = await import('fs')
+      fs.writeFileSync(resolvedPath, renderer.render(), 'utf-8')
+      return new ChartTerminal({ filePath: resolvedPath })
+    }
+
+    // server mode
+    let port = options?.port ?? 7890
+    try {
+      port = await findAvailablePort(port)
+    } catch {
+      throw new Error(`Could not find available port starting from ${port}`)
+    }
+
+    const html = renderer.render()
+    // reuse configured indicator ops for recalc
+    const ops = this.indicatorOps.slice()
+    const serverInstance = runServer(port, html, true, (input: unknown) => {
+      const data = (input as { chartData: PriceHistoryEntry[] }).chartData
+      if (!data || !Array.isArray(data)) throw new Error('Invalid chartData')
+      ops.forEach(op => op(data))
+      return { chartData: data }
+    })
+    return new ChartTerminal({ url: `http://localhost:${port}`, serverInstance })
   }
 }
