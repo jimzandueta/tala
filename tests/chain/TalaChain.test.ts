@@ -182,4 +182,95 @@ describe('TalaChain', () => {
       expect(signals).toHaveProperty('rsiCross')
     })
   })
+
+  describe('chart() — terminal method', () => {
+    it('chart() is a function on TalaChain', () => {
+      const chain = tala()
+      expect(typeof chain.chart).toBe('function')
+    })
+
+    it('chart() returns a ChartTerminal with filePath for html format', async () => {
+      const mockHistory = makeLinearHistory(20)
+      jest.mock('../../src/viz/LightweightChartAdapter', () => ({
+        LightweightChartAdapter: jest.fn().mockImplementation(() => ({
+          getHistory: () => mockHistory,
+          getOverlayKeys: () => [],
+          getOscillatorKeys: () => [],
+        })),
+      }))
+      jest.mock('../../src/viz/HtmlRenderer', () => ({
+        HtmlRenderer: jest.fn().mockImplementation(() => ({
+          render: () => '<html></html>',
+        })),
+      }))
+
+      const { tala } = await import('../../src/chain')
+      const terminal = await tala().sma(14).chart(mockHistory, { format: 'html' })
+      expect(terminal).toHaveProperty('filePath')
+    })
+
+    it('chart() is not chainable — sma/ema/run are undefined on return value', async () => {
+      const mockHistory = makeLinearHistory(20)
+      jest.mock('../../src/viz/LightweightChartAdapter', () => ({
+        LightweightChartAdapter: jest.fn().mockImplementation(() => ({
+          getHistory: () => mockHistory,
+          getOverlayKeys: () => [],
+          getOscillatorKeys: () => [],
+        })),
+      }))
+      jest.mock('../../src/viz/HtmlRenderer', () => ({
+        HtmlRenderer: jest.fn().mockImplementation(() => ({
+          render: () => '<html></html>',
+        })),
+      }))
+
+      const { tala } = await import('../../src/chain')
+      const terminal = await tala().sma(14).chart(mockHistory, { format: 'html' })
+      expect((terminal as any).sma).toBeUndefined()
+      expect((terminal as any).ema).toBeUndefined()
+      expect((terminal as any).run).toBeUndefined()
+    })
+
+    it('rejects filePath outside current working directory', async () => {
+      const mockHistory = makeLinearHistory(20)
+      jest.mock('../../src/viz/LightweightChartAdapter', () => ({
+        LightweightChartAdapter: jest.fn().mockImplementation(() => ({
+          getHistory: () => mockHistory,
+          getOverlayKeys: () => [],
+          getOscillatorKeys: () => [],
+        })),
+      }))
+      jest.mock('../../src/viz/HtmlRenderer', () => ({
+        HtmlRenderer: jest.fn().mockImplementation(() => ({
+          render: () => '<html></html>',
+        })),
+      }))
+
+      const { tala } = await import('../../src/chain')
+      await expect(
+        tala().sma(14).chart(mockHistory, { format: 'html', filePath: '/etc/passwd' })
+      ).rejects.toThrow('filePath must be within the current working directory')
+    })
+
+    it('rejects filePath without .html extension', async () => {
+      const mockHistory = makeLinearHistory(20)
+      jest.mock('../../src/viz/LightweightChartAdapter', () => ({
+        LightweightChartAdapter: jest.fn().mockImplementation(() => ({
+          getHistory: () => mockHistory,
+          getOverlayKeys: () => [],
+          getOscillatorKeys: () => [],
+        })),
+      }))
+      jest.mock('../../src/viz/HtmlRenderer', () => ({
+        HtmlRenderer: jest.fn().mockImplementation(() => ({
+          render: () => '<html></html>',
+        })),
+      }))
+
+      const { tala } = await import('../../src/chain')
+      await expect(
+        tala().sma(14).chart(mockHistory, { format: 'html', filePath: 'test' })
+      ).rejects.toThrow('filePath must end with .html')
+    })
+  })
 })

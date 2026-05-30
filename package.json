@@ -1,6 +1,6 @@
 {
   "name": "@jimzandueta/tala",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "TALA — Technical Analysis Library for Assets. TypeScript, tree-shakeable, zero runtime deps.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -55,6 +55,9 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.5.0",
     "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "lightweight-charts": "^4.2.3"
   },
   "repository": {
     "type": "git",

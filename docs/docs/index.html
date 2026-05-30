@@ -880,15 +880,15 @@
 
     <style id="tala-footer-style">
       .docs-footer {
-        margin-top: 3rem;
-        padding-top: 1.5rem;
+        margin-top: 4rem;
+        padding-top: 2rem;
         border-top: 1px solid var(--border);
         color: var(--muted);
       }
 
       .footer-main {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1.05fr 1fr;
         gap: 1rem;
         align-items: stretch;
       }
@@ -897,82 +897,95 @@
       .footer-links-grid,
       .footer-bottom {
         border: 1px solid var(--border);
-        background: #111827;
-        border-radius: 10px;
+        background: linear-gradient(180deg, #131c2e 0%, #0f1726 100%);
+        border-radius: 12px;
       }
 
       .footer-main > div {
-        padding: 1rem;
+        padding: 1.25rem 1.35rem;
+        display: flex;
+        flex-direction: column;
       }
 
       .footer-brand {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
+        gap: 0.85rem;
+        margin-bottom: 0.85rem;
       }
 
       .footer-brand img {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         object-fit: contain;
         background: #fff;
         border: 1px solid var(--border);
-        border-radius: 9px;
-        padding: 3px;
+        border-radius: 10px;
+        padding: 4px;
         flex-shrink: 0;
       }
 
       .footer-brand strong {
         display: block;
         color: var(--text);
-        font-size: 1rem;
+        font-size: 1.02rem;
+        line-height: 1.2;
       }
 
       .footer-brand span {
         display: block;
         color: var(--muted);
-        font-size: 0.82rem;
+        font-size: 0.8rem;
+        margin-top: 0.15rem;
       }
 
       .docs-footer p {
         color: var(--muted);
         margin: 0;
         font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      .footer-cta {
+        justify-content: space-between;
       }
 
       .footer-cta strong {
         color: var(--text);
         display: block;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.45rem;
+        font-size: 0.98rem;
       }
 
       .footer-actions {
         display: flex;
         gap: 0.55rem;
         flex-wrap: wrap;
-        margin-top: 0.85rem;
+        margin-top: 1rem;
       }
 
       .footer-button {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 36px;
-        padding: 0.45rem 0.75rem;
+        min-height: 38px;
+        padding: 0.5rem 0.85rem;
         border-radius: 8px;
         border: 1px solid var(--border);
-        background: #0d1117;
+        background: #0d1320;
         color: var(--text);
         font-size: 0.84rem;
         font-weight: 600;
         text-decoration: none;
+        transition: border-color 0.15s ease, color 0.15s ease,
+          background 0.15s ease, transform 0.15s ease;
       }
 
       .footer-button:hover {
         border-color: var(--accent);
         color: var(--accent-light);
         text-decoration: none;
+        transform: translateY(-1px);
       }
 
       .footer-button.primary {
@@ -981,20 +994,38 @@
         color: var(--accent-light);
       }
 
+      .footer-button.primary:hover {
+        background: rgba(240, 184, 78, 0.18);
+      }
+
+      .footer-button.kofi {
+        background: rgba(115, 215, 255, 0.1);
+        border-color: rgba(115, 215, 255, 0.35);
+        color: var(--sky);
+      }
+
+      .footer-button.kofi:hover {
+        background: rgba(115, 215, 255, 0.16);
+        border-color: var(--sky);
+        color: var(--sky);
+      }
+
       .footer-links-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem;
-        padding: 1rem;
+        gap: 1.5rem;
+        padding: 1.25rem 1.35rem;
         margin-top: 1rem;
       }
 
       .footer-links-grid h3 {
-        margin: 0 0 0.55rem;
+        margin: 0 0 0.65rem;
         color: var(--text);
         font-family: var(--font-sans);
-        font-size: 0.82rem;
-        letter-spacing: 0;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
       }
 
       .footer-links-grid a {
@@ -1002,13 +1033,21 @@
         color: var(--sky);
         font-size: 0.88rem;
         margin: 0.32rem 0;
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+
+      .footer-links-grid a:hover {
+        color: var(--accent-light);
+        text-decoration: underline;
       }
 
       .footer-bottom {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         gap: 1rem;
-        padding: 0.8rem 1rem;
+        padding: 0.85rem 1.35rem;
         margin-top: 1rem;
         font-size: 0.78rem;
         color: var(--muted);
@@ -1022,6 +1061,8 @@
 
         .footer-bottom {
           flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
         }
       }
     </style>
@@ -1073,6 +1114,167 @@
         color: #ffa657;
       }
     </style>
+
+    <style id="tala-final-polish">
+      /* ── Content lists ──────────────────────────────────────────
+         The global reset zeroes padding/margins, which hides default
+         bullets. Restore sensible list styling inside main content. */
+      main ul,
+      main ol {
+        margin: 0.5rem 0 1rem 1.35rem;
+        padding-left: 0.25rem;
+        color: var(--text);
+      }
+      main ul li,
+      main ol li {
+        margin: 0.3rem 0;
+        line-height: 1.6;
+      }
+      main ul {
+        list-style: disc;
+      }
+      main ul li::marker {
+        color: var(--accent);
+      }
+
+      /* ── Typography polish ─────────────────────────────────────── */
+      body {
+        font-feature-settings: "ss01", "cv11";
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      code,
+      pre,
+      pre code {
+        font-feature-settings: "calt" 1, "liga" 0;
+      }
+
+      /* ── Section header anchor offset & rhythm ─────────────────── */
+      section[id] {
+        scroll-margin-top: 1.5rem;
+      }
+      h2 {
+        font-weight: 600;
+      }
+
+      /* ── Nav refinement ─────────────────────────────────────────── */
+      nav ul li a {
+        transition: color 0.15s ease, border-color 0.15s ease;
+      }
+      nav ul li a.active {
+        font-weight: 600;
+      }
+      nav .logo h1 {
+        letter-spacing: -0.01em;
+      }
+
+      /* ── Charting section: screenshot polish ───────────────────── */
+      #charting img {
+        margin: 1.25rem 0 1.5rem !important;
+        max-width: 100% !important;
+        border-radius: 10px !important;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02),
+          0 8px 24px rgba(0, 0, 0, 0.4);
+      }
+      #charting ul {
+        margin-bottom: 1.25rem;
+      }
+      #charting table {
+        margin-top: 1rem;
+      }
+
+      /* ── Footer: align with GitHub-style dark theme ────────────── */
+      .docs-footer {
+        margin-top: 4.5rem;
+      }
+      .footer-main > div,
+      .footer-links-grid,
+      .footer-bottom {
+        background: var(--surface) !important;
+        border-color: var(--border) !important;
+        border-radius: 10px !important;
+      }
+      .footer-brand img {
+        background: #fff;
+        border-radius: 8px;
+      }
+      .footer-button {
+        background: #0d1117 !important;
+        border-radius: 6px !important;
+        transition: border-color 0.15s ease, color 0.15s ease,
+          background 0.15s ease, transform 0.15s ease;
+      }
+      .footer-button:hover {
+        background: #161b22 !important;
+      }
+      .footer-button.primary {
+        background: rgba(240, 184, 78, 0.1) !important;
+        border-color: rgba(240, 184, 78, 0.4) !important;
+        color: var(--accent-light) !important;
+      }
+      .footer-button.primary:hover {
+        background: rgba(240, 184, 78, 0.18) !important;
+        border-color: var(--accent) !important;
+      }
+      .footer-button.kofi {
+        background: rgba(88, 166, 255, 0.08) !important;
+        border-color: rgba(88, 166, 255, 0.35) !important;
+        color: var(--sky) !important;
+      }
+      .footer-button.kofi:hover {
+        background: rgba(88, 166, 255, 0.15) !important;
+        border-color: var(--sky) !important;
+      }
+      /* Footer section headers: defeat global h3 mono/gold style */
+      .footer-links-grid h3,
+      .docs-footer h3 {
+        color: var(--text) !important;
+        font-family: var(--font-sans) !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        margin: 0 0 0.7rem !important;
+      }
+      .footer-links-grid a {
+        padding: 0.18rem 0;
+      }
+      .footer-bottom {
+        font-size: 0.78rem;
+      }
+
+      /* ── Callout: tighter, more cohesive ───────────────────────── */
+      .callout {
+        background: rgba(240, 184, 78, 0.05);
+        border-left-width: 3px;
+      }
+
+      /* ── Tables: subtle row hover for scannability ─────────────── */
+      table tr:hover td {
+        background: rgba(240, 184, 78, 0.03);
+      }
+
+      /* ── Code: tighten badges & inline alignment ──────────────── */
+      h2 code,
+      h3 code {
+        font-size: 0.78em;
+        font-weight: 500;
+        padding: 0.15em 0.4em;
+        vertical-align: 0.05em;
+      }
+
+      /* ── Responsive: small-screen footer button wrap ──────────── */
+      @media (max-width: 820px) {
+        .footer-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .footer-button {
+          justify-content: flex-start;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="layout">
@@ -1093,6 +1295,7 @@
           <li><a href="#install">Install</a></li>
           <li><a href="#quickstart">Quick Start</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#charting">Charting</a></li>
           <div class="nav-section">Moving Averages</div>
           <li><a href="#sma">SMA</a></li>
           <li><a href="#ema">EMA</a></li>
@@ -1414,6 +1617,72 @@ signals.rsiCross
           </div>
         </section>
 
+        <!-- ── Charting ── -->
+        <section id="charting">
+          <h2>Charting</h2>
+          <p>
+            <code>chart()</code> is a terminal chain method that renders your computed indicators
+            with TradingView Lightweight Charts.
+          </p>
+
+          <h3>HTML mode</h3>
+          <p>
+            Writes a self-contained HTML file to disk. Open it directly in any browser
+            (no local server required).
+          </p>
+          <pre><code><span class="kw">await</span> <span class="fn">tala</span>()
+  .<span class="fn">sma</span>(<span class="num">14</span>)
+  .<span class="fn">ema</span>(<span class="num">26</span>)
+  .<span class="fn">bb</span>(<span class="num">20</span>, <span class="num">2</span>)
+  .<span class="fn">macd</span>()
+  .<span class="fn">rsi</span>(<span class="num">14</span>)
+  .<span class="fn">chart</span>(history, { <span class="kw">format</span>: <span class="str">'html'</span> })</code></pre>
+
+          <p>The generated page includes:</p>
+          <ul>
+            <li>Candlestick chart with overlay indicators (SMA, EMA, Bollinger Bands, etc.)</li>
+            <li>Oscillator panes grouped by scale: 0–100 (RSI, ADX, Stoch), around 0 (MACD, Williams %R, Fisher), and CCI</li>
+            <li>Per-pane hover tooltips with OHLC and indicator values</li>
+            <li>Sidebar legend with per-indicator visibility toggles</li>
+            <li>Optional time-scale sync across panes</li>
+            <li>Editable OHLCV table (candles update immediately as you edit)</li>
+            <li>PNG export for the full chart layout (via html2canvas)</li>
+          </ul>
+
+          <h3>Server mode</h3>
+          <p>
+            Starts a local HTTP server and opens your browser automatically. In this mode,
+            <strong>Recalculate</strong> is enabled: edit OHLCV values in the data table,
+            click the button, and tala re-runs the chain on the server with the updated data.
+            If the requested port is busy, tala tries the next available port.
+          </p>
+          <pre><code><span class="kw">await</span> <span class="fn">tala</span>()
+  .<span class="fn">sma</span>(<span class="num">14</span>)
+  .<span class="fn">rsi</span>(<span class="num">14</span>)
+  .<span class="fn">chart</span>(history, { <span class="kw">format</span>: <span class="str">'server'</span>, <span class="kw">port</span>: <span class="num">7890</span> })</code></pre>
+
+          <p>
+            Chart rendering requires this peer dependency:
+            <code>npm install lightweight-charts</code>
+          </p>
+
+          <pre><code><span class="cm"># Generate a demo chart</span>
+npx tsx demo/test-viz.ts
+
+<span class="cm"># Or start the live server</span>
+npx tsx demo/test-server.ts</code></pre>
+
+          <img src="assets/tala-chart-screenshot.png" alt="tala chart screenshot" style="width:100%;display:block;border:1px solid var(--border)">
+
+          <table>
+            <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+            <tr><td><code>format</code></td><td><code>'html' | 'server'</code></td><td><code>'server'</code></td><td>Output mode</td></tr>
+            <tr><td><code>filePath</code></td><td><code>string</code></td><td><code>'./demo/tala-chart.html'</code></td><td>Output path for HTML mode</td></tr>
+            <tr><td><code>port</code></td><td><code>number</code></td><td><code>7890</code></td><td>Port for server mode</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td><code>'tala chart'</code></td><td>Chart title</td></tr>
+          </table>
+        </section>
+
         <!-- ══════════════════════════════════════════════════════════
          MOVING AVERAGES
     ══════════════════════════════════════════════════════════ -->
@@ -1573,15 +1842,17 @@ signals.rsiCross
 
           <div class="formula">
             <div class="label">Formula</div>
-            $$m = \lfloor \text{offset} \times \text{period} \rfloor, \quad s =
-            \frac{\text{period}}{\sigma}$$ $$w_j = \exp\!\left(-\frac{(j -
-            m)^2}{2\,s^2}\right), \quad j = 0 \ldots \text{period}{-}1$$
-            $$\text{ALMA} = \frac{\displaystyle\sum_{j} w_j\,
-            C_j}{\displaystyle\sum_{j} w_j}$$
+            $$n = \text{period}, \quad m = \text{offset}\,(n-1), \quad s =
+            \frac{n}{\sigma}$$ $$w_j = \exp\!\left(-\frac{(j -
+            m)^2}{2\,s^2}\right), \quad j = 0 \ldots n{-}1$$
+            $$\text{ALMA}_t = \frac{\displaystyle\sum_{j=0}^{n-1} w_j\,
+            C_{t-n+1+j}}{\displaystyle\sum_{j=0}^{n-1} w_j}$$
             <div class="note">
-              The Gaussian peak sits at bar $m$. Higher offset → peak closer to
-              bar 0 (recent) → less lag but more noise. Higher sigma → wider
-              bell → smoother output.
+              The Gaussian peak sits at index $m$ in the window
+              ($j=0$ oldest, $j=n-1$ newest). Higher offset shifts the peak
+              toward more recent bars (less lag, more sensitivity). With
+              $s=n/\sigma$, larger $\sigma$ makes the bell narrower (more
+              reactive), while smaller $\sigma$ makes it wider (smoother).
             </div>
           </div>
 
@@ -1596,13 +1867,12 @@ signals.rsiCross
               behaves like a centered low-pass filter, smoother but laggier.
             </div>
             <div class="step">
-              <strong>sigma small</strong> (e.g. 2): narrow bell — weights
-              concentrated near $m$, closer to a short SMA at that offset.
+              <strong>sigma small</strong> (e.g. 2): wider bell — weights spread
+              more broadly, producing smoother output.
             </div>
             <div class="step">
-              <strong>sigma large</strong> (e.g. 6+): wide bell — closer to a
-              uniform SMA. Combine with a high offset for the cleanest
-              "recent-weighted" smooth.
+              <strong>sigma large</strong> (e.g. 6+): narrower bell — weights
+              concentrate more around $m$, increasing responsiveness.
             </div>
           </div>
 
@@ -2965,8 +3235,8 @@ result[<span class="num">0</span>].fisherPrev   <span class="cm">// renamed sign
             <div class="footer-cta">
               <strong>Support the project</strong>
               <p>
-                If tala saves you time, star the repo on GitHub or buy me a
-                coffee to support continued development.
+                If tala saves you time, star the repo on GitHub or send a tip
+                on Ko-fi to support continued development.
               </p>
               <div class="footer-actions">
                 <a
@@ -2990,19 +3260,27 @@ result[<span class="num">0</span>].fisherPrev   <span class="cm">// renamed sign
                   </svg>
                   Star tala on GitHub
                 </a>
-                <script
-                  type="text/javascript"
-                  src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
-                  data-name="bmc-button"
-                  data-slug="jimzandueta"
-                  data-color="#FFDD00"
-                  data-emoji="☕"
-                  data-font="Cookie"
-                  data-text="Buy me a coffee"
-                  data-outline-color="#000000"
-                  data-font-color="#000000"
-                  data-coffee-color="#ffffff"
-                ></script>
+                <a
+                  class="footer-button kofi"
+                  href="https://ko-fi.com/jimzandueta"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Support on Ko-fi"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    style="margin-right: 0.4rem; vertical-align: -2px"
+                  >
+                    <path
+                      d="M18.5 3h-13A3.5 3.5 0 0 0 2 6.5v7A6.5 6.5 0 0 0 8.5 20h3a6.5 6.5 0 0 0 6.42-5.5H19a5 5 0 0 0 0-10h-.5zM16 13.5a4.5 4.5 0 0 1-4.5 4.5h-3A4.5 4.5 0 0 1 4 13.5v-7A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5v.5h-1a3 3 0 0 0 0 6h-3v.5zm3-2.5a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2h-1zM8.7 8.1c.9-1.1 2.5-1.2 3.3 0 .8-1.2 2.4-1.1 3.3 0 1 1.2.6 2.8-.4 3.8L12 14.7 9.1 11.9c-1-1-1.4-2.6-.4-3.8z"
+                    />
+                  </svg>
+                  Support on Ko-fi
+                </a>
                 <a
                   class="footer-button"
                   href="https://www.npmjs.com/package/@jimzandueta/tala"
@@ -3085,10 +3363,10 @@ result[<span class="num">0</span>].fisherPrev   <span class="cm">// renamed sign
                 >Discussions</a
               >
               <a
-                href="https://buymeacoffee.com/jimzandueta"
+                href="https://ko-fi.com/jimzandueta"
                 target="_blank"
                 rel="noopener"
-                >Buy me a coffee</a
+                >Support on Ko-fi</a
               >
               <a
                 href="https://github.com/jimzandueta/tala/blob/master/LICENSE"
